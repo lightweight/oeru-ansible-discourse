@@ -1,0 +1,15 @@
+# file: roles/common/tasks/main.yml
+---
+- include: swap.yml
+
+- name: Install git
+  apt: name=git state=latest
+
+- name: Create location
+  command: mkdir /var/discourse
+
+- name: Set up Discourse Docker container
+  git: >
+    repo=https://github.com/discourse/discourse_docker.git
+    dest=/var/discourse/
+    update=no
