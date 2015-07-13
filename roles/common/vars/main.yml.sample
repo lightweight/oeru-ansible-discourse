@@ -1,0 +1,30 @@
+# this is where the variables all go
+
+user: discourse
+
+discourse:
+  domain: [domain name of your discourse instance]
+  email: [valid email address]
+  dir: /home/www/discourse
+  repo: https://github.com/discourse/discourse_docker.git
+  lang: en_US.UTF-8
+  data:
+    host: data
+    db:
+      name: discourse
+      shared_buffers: 512MB
+      work_mem: 25MB
+      user: discourse
+      password: [secret password]
+    redis:
+  web:
+    port: 8080 # port on the host
+    host: data
+    workers: 3
+  # replace with Mandrill configuration on Prod
+    smtp:
+      domain: smtp.mandrillapp.com
+      port: 587
+      user: [your mandrill email address]
+      password: [your mandrill api key]
+      starttls: true
