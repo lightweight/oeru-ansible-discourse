@@ -22,3 +22,11 @@ sudo adduser --system --home /home/www/discourse --ingroup docker --disabled-pas
 
 To run this from the Ansible git repo top level:
 ansible-playbook site.yml
+
+You will need a email account with a distributed SMTP service like http://mandrill.com - I've included configuration supporting this.
+
+Your main site-variables will be in roles/common/vars/main.yml - from within this directory, set it up like this:
+
+cp roles/common/vars/main.yml.sample to roles/common/vars/main.yml
+
+And then use a text editor (like nano, vim, emacs, etc.) to edit the file and put in your values. 
