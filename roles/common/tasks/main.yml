@@ -1,15 +1,20 @@
 # file: roles/common/tasks/main.yml
 ---
-- include: swap.yml
 
-- name: Install git
-  apt: name=git state=latest
-
-- name: Create location
-  command: mkdir /var/discourse
-
-- name: Set up Discourse Docker container
+- name: Set up Discourse Docker container contents
   git: >
     repo=https://github.com/discourse/discourse_docker.git
-    dest=/var/discourse/
+    dest={{ discourse.dir }}
     update=no
+
+- name: Create the data.yml PostgreSQL and Redis configuration file
+  template: src=data.j2
+    dest={{ discourse.dir }}/containers/data.yml
+  notify:
+    - Build Discourse data
+
+- name: Create the web.yml Application server configuration file
+  template: src=web.j2
+    dest={{ discourse.dir }}/containers/web.yml
+  notify:
+    - Build Discourse web

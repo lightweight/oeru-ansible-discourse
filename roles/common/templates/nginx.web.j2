@@ -1,0 +1,53 @@
+upstream discourse {
+#fail_timeout is optional; I throw it in to see errors quickly
+  server 127.0.0.1:8080 fail_timeout=5;
+}
+
+
+# configure the virtual host
+server {
+  # replace with your domain name
+  server_name {{ discourse.domain }};
+
+  root /var/www; # this is just a place holder
+  index index.html; # this is also just a place holder
+
+  #Rewrite
+
+  # assets
+  location ~* \.(jpg|jpeg|gif|png|bmp|ico|pdf|txt|css|js) {
+    try_files $uri @discourse;
+    add_header Cache-Control public;
+    add_header Cache-Control must-revalidate;
+    expires 7d;
+  }
+
+  # example.com/a.html gets redirected to example.com/a
+  location ~* \.html$ {
+    rewrite ^(.*)\/index.html$ $1 permanent;
+    rewrite ^(.+)\.html$ $scheme://$host$1 permanent;
+  }
+
+  # example.com/foo/ loads example.com/foo/index.html
+  location ~* ^(.*)/$ {
+    try_files $1.html $1/index.html @discourse;
+  }
+
+  # anything else not processed by the above rules:
+  # * example.com/a will load example.com/a.html
+  # * or if that fails, example.com/a/index.html
+
+  location / {
+    rewrite ^(.*)\/index$ $1 permanent;
+    try_files $uri.html $uri/index.html @discourse;
+  }
+
+  # this is where all the action happens  
+  location @discourse {
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header Host $http_host;
+    proxy_redirect off;
+    proxy_pass http://discourse;
+  }
+
+}

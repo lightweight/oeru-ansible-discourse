@@ -1,0 +1,8 @@
+# file: site.yml
+---
+- hosts: discourse
+  connection: local
+  sudo: yes
+  sudo_user: discourse
+  roles:
+    - common

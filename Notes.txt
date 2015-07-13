@@ -1,0 +1,39 @@
+On a new Vagrant server or on Hetzner, we need to do the following:
+
+Install Ansible:
+sudo aptitude install software-properties-common
+sudo apt-add-repository ppa:ansible/ansible
+sudo apt-get update
+sudo apt-get install ansible
+
+Configure Variables - see roles/common/vars/main.yml
+
+With Ansible:
+
+- Install PostgreSQL 9.3
+postgresql postgresql-contrib postgresql-server-dev-9.3
+
+- Install PostgreSQL backup tools
+autopostgresqlbackup
+
+- Install Redis
+
+ - name: Add the Redis PPA
+   apt_repository: repo='ppa:rwky/redis' update_cache=yes
+ - name: Install Redis from PPA
+   apt: pkg=redis-server state=installed
+ - name: Start Redis
+   service: name=redis state=started
+
+- Install Discourse container
+mkdir {{ discourse.dir }}
+cd {{ discourse.dir }}
+wget -qO- https://get.docker.com/ | sh
+usermod -aG docker {{ user }}
+git clone {{ discourse.repo }} {{ discourse.dir }}
+
+
+root@vagrant:/var/discourse/containers# vim app.yml
+
+- Install Nginx
+configure proxying for Discourse

@@ -1,5 +1,0 @@
-# file: roles/common/handler/main.yml
-# from http://aceofba.se/ansible/ansible-swap/blob/master/handlers/main.yml
----
-- name: reload sysctl.conf
-  command: sysctl -p

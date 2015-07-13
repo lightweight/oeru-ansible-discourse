@@ -1,0 +1,31 @@
+# this is where the variables all go
+
+user: discourse
+
+discourse:
+  domain: discourse.local
+  email: dave@davelane.nz
+  dir: /home/www/discourse
+  repo: https://github.com/discourse/discourse_docker.git
+  domain: discourse.local
+  lang: en_US.UTF-8
+  data:
+    host: data
+    db:
+      name: discourse
+      shared_buffers: 512MB
+      work_mem: 25MB
+      user: discourse
+      password: 'v,iX$8g>v8Y='
+    redis:
+  web:
+    port: 8080 # port on the host
+    host: data
+    workers: 3
+  # replace with Mandrill configuration on Prod
+    smtp:
+      domain: smtp.mandrillapp.com
+      port: 587
+      user: dave@davelane.nz
+      password: 1QWMyvwnxGUqXRdXlbi-ug
+      starttls: true
